@@ -1,0 +1,244 @@
+package enrollmentsystems;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Button;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import java.awt.Font;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JComboBox;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JRadioButton;
+import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
+
+public class EnrollmentSystem {
+
+	private JFrame frame;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JTextField textField_3;
+	private JTextField textField_7;
+	private JTextField textField_8;
+	private JPasswordField passwordField;
+    
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					EnrollmentSystem window = new EnrollmentSystem();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public EnrollmentSystem() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.getContentPane().setBackground(new Color(0, 145, 0));
+		frame.setBounds(100, 100, 391, 366);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("First Name:");
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setBounds(22, 50, 77, 14);
+		frame.getContentPane().add(lblNewLabel);
+		
+		textField = new JTextField();
+		textField.setBounds(89, 50, 86, 14);
+		frame.getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Enrollment System");
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setBounds(79, -1, 322, 40);
+		lblNewLabel_1.setBackground(Color.PINK);
+		lblNewLabel_1.setFont(new Font("Segoe Script", Font.PLAIN, 20));
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblMiddleName = new JLabel("Middle Name:");
+		lblMiddleName.setForeground(Color.WHITE);
+		lblMiddleName.setBounds(22, 76, 77, 14);
+		frame.getContentPane().add(lblMiddleName);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(89, 75, 86, 14);
+		textField_1.setColumns(10);
+		frame.getContentPane().add(textField_1);
+		
+		JLabel lblLastName = new JLabel("Last Name:");
+		lblLastName.setForeground(Color.WHITE);
+		lblLastName.setBounds(22, 101, 77, 14);
+		frame.getContentPane().add(lblLastName);
+		
+		textField_2 = new JTextField();
+		textField_2.setBounds(89, 101, 86, 14);
+		textField_2.setColumns(10);
+		frame.getContentPane().add(textField_2);
+		
+		JLabel lblAge = new JLabel("Age:");
+		lblAge.setForeground(Color.WHITE);
+		lblAge.setBounds(56, 129, 30, 14);
+		frame.getContentPane().add(lblAge);
+		
+		JSpinner spinner = new JSpinner();
+		spinner.setBounds(89, 126, 30, 20);
+		frame.getContentPane().add(spinner);
+		
+		JLabel lblGender = new JLabel("Gender:");
+		lblGender.setForeground(Color.WHITE);
+		lblGender.setBounds(196, 50, 77, 14);
+		frame.getContentPane().add(lblGender);
+		
+		JLabel lblCitizenship = new JLabel("Citizenship:");
+		lblCitizenship.setForeground(Color.WHITE);
+		lblCitizenship.setBounds(196, 76, 77, 14);
+		frame.getContentPane().add(lblCitizenship);
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(258, 76, 86, 14);
+		textField_4.setColumns(10);
+		frame.getContentPane().add(textField_4);
+		
+		JLabel lblPlaceOfBirth = new JLabel("Place of Birth:");
+		lblPlaceOfBirth.setForeground(Color.WHITE);
+		lblPlaceOfBirth.setBounds(22, 166, 99, 14);
+		frame.getContentPane().add(lblPlaceOfBirth);
+		
+		textField_5 = new JTextField();
+		textField_5.setBounds(99, 166, 245, 14);
+		textField_5.setColumns(10);
+		frame.getContentPane().add(textField_5);
+		
+		JLabel lblAddress = new JLabel("Address:");
+		lblAddress.setForeground(Color.WHITE);
+		lblAddress.setBounds(22, 191, 99, 14);
+		frame.getContentPane().add(lblAddress);
+		
+		textField_6 = new JTextField();
+		textField_6.setBounds(99, 191, 245, 14);
+		textField_6.setColumns(10);
+		frame.getContentPane().add(textField_6);
+		
+		JLabel lblIfTransferee = new JLabel("If Transferee:");
+		lblIfTransferee.setForeground(Color.WHITE);
+		lblIfTransferee.setBounds(22, 216, 99, 14);
+		frame.getContentPane().add(lblIfTransferee);
+		
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("Male");
+		rdbtnNewRadioButton.setBounds(302, 45, 55, 23);
+		rdbtnNewRadioButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		frame.getContentPane().add(rdbtnNewRadioButton);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(131, 236, 214, 14);
+		textField_3.setColumns(10);
+		frame.getContentPane().add(textField_3);
+		
+		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Female");
+		rdbtnNewRadioButton_1.setBounds(240, 45, 104, 23);
+		frame.getContentPane().add(rdbtnNewRadioButton_1);
+		
+		JLabel lblNameOfLast = new JLabel("Name of Last School:");
+		lblNameOfLast.setForeground(Color.WHITE);
+		lblNameOfLast.setBounds(22, 236, 128, 14);
+		frame.getContentPane().add(lblNameOfLast);
+		
+		JLabel lblAdressOfLast = new JLabel("Adress of Last School:");
+		lblAdressOfLast.setForeground(Color.WHITE);
+		lblAdressOfLast.setBounds(22, 256, 128, 14);
+		frame.getContentPane().add(lblAdressOfLast);
+		
+		textField_7 = new JTextField();
+		textField_7.setBounds(131, 256, 214, 14);
+		textField_7.setColumns(10);
+		frame.getContentPane().add(textField_7);
+		
+		JButton btnNewButton = new JButton("ADD");
+		btnNewButton.setBackground(new Color(240, 240, 240));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setBounds(22, 281, 64, 23);
+		frame.getContentPane().add(btnNewButton);
+		
+		JButton btnEnter = new JButton("ENTER");
+		btnEnter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnEnter.setBounds(89, 281, 77, 23);
+		frame.getContentPane().add(btnEnter);
+		
+		JButton btnCancel = new JButton("CANCEL");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnCancel.setBounds(172, 281, 86, 23);
+		frame.getContentPane().add(btnCancel);
+		
+		JButton btnExit = new JButton("EXIT");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnExit.setBounds(266, 281, 64, 23);
+		frame.getContentPane().add(btnExit);
+		
+		JLabel lblYearLevel = new JLabel("Year Level:");
+		lblYearLevel.setForeground(Color.WHITE);
+		lblYearLevel.setBounds(196, 101, 77, 14);
+		frame.getContentPane().add(lblYearLevel);
+		
+		textField_8 = new JTextField();
+		textField_8.setColumns(10);
+		textField_8.setBounds(258, 101, 86, 14);
+		frame.getContentPane().add(textField_8);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(258, 126, 86, 14);
+		frame.getContentPane().add(passwordField);
+		
+		JLabel lblVoucherCode = new JLabel("VOUCHER CODE:");
+		lblVoucherCode.setForeground(Color.WHITE);
+		lblVoucherCode.setBounds(164, 126, 109, 14);
+		frame.getContentPane().add(lblVoucherCode);
+		
+		JLabel lblNewLabel_2 = new JLabel("New label");
+		lblNewLabel_2.setBackground(new Color(0, 128, 0));
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\gdelacruz\\Downloads\\DLSAA_One_La_Salle_Cebu_Chapter-removebg-preview (1).png"));
+		lblNewLabel_2.setBounds(-61, -17, 479, 333);
+		frame.getContentPane().add(lblNewLabel_2);
+	}
+}
