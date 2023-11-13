@@ -54,7 +54,7 @@ public class enrollmentform {
 	private JComboBox strand;
 	private JButton btnNewButton;
 	private JButton btnClearAll;
-	private static Connection con = null;
+	private static Connection con;
 
 	/**
 	 * Launch the application.
@@ -80,6 +80,7 @@ public class enrollmentform {
 	 */
 	public enrollmentform() {
 		initialize();
+		
 	}
 
 	/**
@@ -285,6 +286,7 @@ public class enrollmentform {
 		       new LoginForm().setVisible(true);
 		    }
 		});
-	  
-	}
+	 
+	  }
+	
 }

@@ -13,7 +13,7 @@ public class LoginForm {
     private JFrame loginFrame;
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private static Connection con = null;
+    private static Connection con;
    
     
     public LoginForm() {
@@ -26,7 +26,7 @@ public class LoginForm {
         loginFrame.setBounds(100, 100, 300, 200);
         loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loginFrame.getContentPane().setLayout(null);
-       
+ 
         
         JLabel lblUsername = new JLabel("Username:");
         lblUsername.setBounds(30, 40, 80, 20);
@@ -67,7 +67,12 @@ public class LoginForm {
                       ResultSet resultSet = preparedstatement.executeQuery();
                       
                 if (resultSet.next()) {
+                	  new Dashboard().setVisible(true);
                       JOptionPane.showMessageDialog(null, "Login Succesfully");
+                      loginFrame.dispose();
+                      
+                      
+                      
                 
                 } else {
                 	JOptionPane.showMessageDialog(null, "Incorrect Credentials","ERROR",JOptionPane.ERROR_MESSAGE);
