@@ -5,18 +5,27 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.Font;
+import java.awt.ScrollPane;
+
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,7 +39,8 @@ public class Dashboard {
     private JLabel totalabmbl;
     private JLabel totalhumbl_1_1;
     private JLabel totalgaslbl_1_2;
-    private JLabel totalcooklbl_1_3; 
+    private JLabel totalcooklbl_1_3;
+    private JTable table;
 	private static Connection con;
 	
 	
@@ -49,6 +59,7 @@ private void connect() {
 		connect();
 		updateTotalStudents();
 		TotalStrandStudents();
+		populateTable();
 	}
 	
 	/**
@@ -56,7 +67,7 @@ private void connect() {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 670, 380);
+		frame.setBounds(100, 100, 776, 415);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -75,37 +86,48 @@ private void connect() {
 		JPanel menupnl = new JPanel();
 		menupnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		menupnl.setBackground(new Color(4, 182, 169));
-		menupnl.setBounds(0, 0, 129, 341);
+		menupnl.setBounds(0, 0, 129, 365);
 		frame.getContentPane().add(menupnl);
 		menupnl.setLayout(null);
 		
 		JPanel Dashboard = new JPanel();
 		Dashboard.setBackground(new Color(4, 169, 192));
 		Dashboard.setBorder(new LineBorder(new Color(0, 0, 0)));
-		Dashboard.setBounds(139, 11, 505, 319);
+		Dashboard.setBounds(139, 11, 611, 354);
 		frame.getContentPane().add(Dashboard);
 		Dashboard.setLayout(null);
 		
+		JPanel infopnl = new JPanel();
+		infopnl.setBounds(139, 11, 611, 354);
+		frame.getContentPane().add(infopnl);
+		infopnl.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(33, 5, 452, 402);
+        infopnl.add(scrollPane);
+
+        table = new JTable();
+        scrollPane.setViewportView(table);
+        
 		JLabel dashboardbtn = new JLabel("DashBoard");
 		dashboardbtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Dashboard.setVisible(false);
+				infopnl.setVisible(false);
+				Dashboard.setVisible(true);
+				
 			}
 		});
 		dashboardbtn.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		dashboardbtn.setBounds(10, 136, 105, 36);
 		menupnl.add(dashboardbtn);
 		
-		JPanel infopnl = new JPanel();
-		infopnl.setBounds(139, 11, 505, 319);
-		frame.getContentPane().add(infopnl);
-
 		JLabel lblStudentinfo = new JLabel("StudentInfo");
 		lblStudentinfo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+			    Dashboard.setVisible(false);
+			    infopnl.setVisible(true);
 			}
 		});
 		lblStudentinfo.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -115,32 +137,32 @@ private void connect() {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel_1.setBackground(new Color(99, 238, 133));
-		panel_1.setBounds(10, 22, 485, 66);
+		panel_1.setBounds(10, 22, 591, 66);
 		Dashboard.add(panel_1);
 		panel_1.setLayout(null);
 		
 		JLabel totalstudlbl = new JLabel("Total Students:");
-		totalstudlbl.setFont(new Font("Tahoma", Font.BOLD, 14));
-		totalstudlbl.setBounds(10, 24, 116, 14);
+		totalstudlbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+		totalstudlbl.setBounds(10, 24, 189, 14);
 		panel_1.add(totalstudlbl);
 	
 	
 		total = new JLabel("0");
-		total.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		total.setBounds(269, 26, 46, 14);
+		total.setFont(new Font("Tahoma", Font.PLAIN, 23));
+		total.setBounds(326, 11, 46, 44);
 		panel_1.add(total);
 		
 		JPanel ictpnl = new JPanel();
 		ictpnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		ictpnl.setBackground(new Color(4, 126, 250));
-		ictpnl.setBounds(10, 104, 147, 80);
+		ictpnl.setBounds(10, 99, 174, 80);
 		Dashboard.add(ictpnl);
 		ictpnl.setLayout(null);
 		
 		JLabel lblNewLabel_1 = new JLabel("Total Tvl-ICT Students");
 		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel_1.setBounds(10, 11, 127, 14);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_1.setBounds(10, 11, 163, 14);
 		ictpnl.add(lblNewLabel_1);
 		
 		totalIctlbl = new JLabel("0");
@@ -153,27 +175,27 @@ private void connect() {
 		JPanel stempnl = new JPanel();
 		stempnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		stempnl.setBackground(new Color(4, 126, 250));
-		stempnl.setBounds(182, 104, 147, 80);
+		stempnl.setBounds(224, 99, 174, 80);
 		Dashboard.add(stempnl);
 		stempnl.setLayout(null);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Total STEM Students");
 		lblNewLabel_1_1.setForeground(Color.WHITE);
-		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel_1_1.setBounds(10, 11, 127, 14);
+		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_1_1.setBounds(10, 11, 167, 14);
 		stempnl.add(lblNewLabel_1_1);
 		
 		totalstemlbl = new JLabel("0");
 		totalstemlbl.setHorizontalAlignment(SwingConstants.CENTER);
 		totalstemlbl.setForeground(Color.WHITE);
 		totalstemlbl.setFont(new Font("Tahoma", Font.BOLD, 14));
-		totalstemlbl.setBounds(10, 36, 127, 14);
+		totalstemlbl.setBounds(10, 36, 183, 14);
 		stempnl.add(totalstemlbl);
 		
 		JPanel abmpnl = new JPanel();
 		abmpnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		abmpnl.setBackground(new Color(4, 126, 250));
-		abmpnl.setBounds(348, 104, 147, 80);
+		abmpnl.setBounds(427, 99, 174, 80);
 		Dashboard.add(abmpnl);
 		abmpnl.setLayout(null);
 		
@@ -181,13 +203,13 @@ private void connect() {
 		totalabmbl.setHorizontalAlignment(SwingConstants.CENTER);
 		totalabmbl.setForeground(Color.WHITE);
 		totalabmbl.setFont(new Font("Tahoma", Font.BOLD, 14));
-		totalabmbl.setBounds(10, 36, 127, 14);
+		totalabmbl.setBounds(0, 37, 165, 14);
 		abmpnl.add(totalabmbl);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Total ABM Students");
 		lblNewLabel_1_1_1.setForeground(Color.WHITE);
-		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel_1_1_1.setBounds(10, 11, 127, 14);
+		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_1_1_1.setBounds(10, 11, 145, 14);
 		abmpnl.add(lblNewLabel_1_1_1);
 		
 		JPanel humpnl = new JPanel();
@@ -233,7 +255,7 @@ private void connect() {
 		JPanel cookpnl = new JPanel();
 		cookpnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		cookpnl.setBackground(new Color(4, 126, 250));
-		cookpnl.setBounds(348, 209, 147, 80);
+		cookpnl.setBounds(454, 209, 147, 80);
 		Dashboard.add(cookpnl);
 		cookpnl.setLayout(null);
 		
@@ -306,4 +328,37 @@ private void connect() {
     		r.printStackTrace();
     	}
     }
-}
+    	private void populateTable() {
+            try {
+                Statement statement = con.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM studentinfo");
+
+                DefaultTableModel model = new DefaultTableModel();
+                table.setModel(model);
+
+                ResultSetMetaData metaData = resultSet.getMetaData();
+                int columnCount = metaData.getColumnCount();
+
+                // Add columns dynamically
+                for (int column = 1; column <= columnCount; column++) {
+                    model.addColumn(metaData.getColumnName(column));
+                }
+
+               
+                while (resultSet.next()) {
+                    Object[] rowData = new Object[columnCount];
+                    for (int i = 1; i <= columnCount; i++) {
+                        rowData[i - 1] = resultSet.getObject(i);
+                    }
+                    model.addRow(rowData);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            
+                }
+            
+        }
+    }
+    
+    
