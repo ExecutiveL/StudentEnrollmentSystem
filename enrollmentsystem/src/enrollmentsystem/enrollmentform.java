@@ -53,7 +53,6 @@ public class enrollmentform {
 	private JLabel lblChoosebStrand;
 	private JComboBox strand;
 	private JButton btnNewButton;
-	private JButton btnClearAll;
 	private static Connection con;
 
 	/**
@@ -157,10 +156,7 @@ public class enrollmentform {
 		gender.setModel(new DefaultComboBoxModel(new String[] {"Male", "Female", "Prefer not to say"}));
 		gender.setBounds(487, 131, 119, 22);
 		frmEnrollmentform.getContentPane().add(gender);
-		
-		
-		
-		
+	
 		
 		lblAddress = new JLabel("Mobile number");
 		lblAddress.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -229,6 +225,16 @@ public class enrollmentform {
 					preparedstatement.executeUpdate();
 					con.commit();
 					JOptionPane.showMessageDialog(null, "You are successfully Enrolled","Enrolled Succesfully",JOptionPane.INFORMATION_MESSAGE);
+					
+					fname.setText(""); 
+					lname.setText(""); 
+					mname.setText(""); 
+					email.setText("");
+					pnumber.setText("");
+					gender.setSelectedIndex(0);
+					strand.setSelectedIndex(0);
+					bdate.setDate(null);
+					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -251,24 +257,6 @@ public class enrollmentform {
 		lblEnrollmentSystem.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		lblEnrollmentSystem.setBounds(10, 11, 185, 30);
 		frmEnrollmentform.getContentPane().add(lblEnrollmentSystem);
-		
-		btnClearAll = new JButton("Clear All");
-		btnClearAll.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			fname.setText(""); 
-			lname.setText(""); 
-			mname.setText(""); 
-			email.setText("");
-			pnumber.setText("");
-			gender.setSelectedIndex(0);
-			strand.setSelectedIndex(0);
-			bdate.setDate(null);
-				
-			}
-		});
-		btnClearAll.setBounds(375, 295, 100, 23);
-		frmEnrollmentform.getContentPane().add(btnClearAll);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmEnrollmentform.setJMenuBar(menuBar);

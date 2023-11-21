@@ -16,10 +16,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -41,6 +43,8 @@ public class Dashboard {
     private JLabel totalgaslbl_1_2;
     private JLabel totalcooklbl_1_3;
     private JTable table;
+    private JTextField searchtf;
+    private DefaultTableModel model;
 	private static Connection con;
 	
 	
@@ -67,7 +71,7 @@ private void connect() {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 776, 415);
+		frame.setBounds(100, 100, 800, 415);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -93,22 +97,82 @@ private void connect() {
 		JPanel Dashboard = new JPanel();
 		Dashboard.setBackground(new Color(4, 169, 192));
 		Dashboard.setBorder(new LineBorder(new Color(0, 0, 0)));
-		Dashboard.setBounds(139, 11, 611, 354);
+		Dashboard.setBounds(139, 11, 635, 354);
 		frame.getContentPane().add(Dashboard);
 		Dashboard.setLayout(null);
 		
 		JPanel infopnl = new JPanel();
-		infopnl.setBounds(139, 11, 611, 354);
+		infopnl.setBounds(135, 11, 680, 354);
+		infopnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		frame.getContentPane().add(infopnl);
+		infopnl.setVisible(false);
 		infopnl.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(33, 5, 452, 402);
+        scrollPane.setBounds(0, 0, 547, 354);
         infopnl.add(scrollPane);
 
         table = new JTable();
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setFocusable(false);
+        table.setRowSelectionAllowed(true);
         scrollPane.setViewportView(table);
         
+        JLabel searchforlbl = new JLabel("Search For:");
+        searchforlbl.setBounds(571, 11, 95, 14);
+        infopnl.add(searchforlbl);
+        
+        searchtf = new JTextField();
+        searchtf.setBounds(557, 36, 105, 20);
+        infopnl.add(searchtf);
+        searchtf.setColumns(10);
+        
+        JButton searchbtn = new JButton("Search");
+        searchbtn.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		try {
+        			String keyword = searchtf.getText();
+        			PreparedStatement pr = con.prepareStatement("SELECT * FROM studentinfo WHERE ID = ? OR fname = ?");
+        			pr.setString(1, keyword);
+        			pr.setString(2, keyword);
+        			
+        			ResultSet rs = pr.executeQuery();
+        			 model.setRowCount(0);
+        			while(rs.next()) {
+        				  Object[] rowData = {
+                                  rs.getInt("ID"),
+                                  rs.getString("fname"),
+                                  rs.getString("mname"),
+                                  rs.getString("lname"),
+                                  rs.getString("age"),
+                                  rs.getString("bdate"),
+                                  rs.getString("gender"),
+                                  rs.getString("pnumber"),
+                                  rs.getString("email"),
+                                  rs.getString("strand"),
+                                  rs.getString("Subjects")
+                          };
+        				  model.addRow(rowData);
+        			}
+        			
+        			
+        		} catch(Exception r) {
+        			
+        		}
+        	}
+        });
+        searchbtn.setBounds(557, 67, 105, 23);
+        infopnl.add(searchbtn);
+        
+        JButton deletebtn = new JButton("DELETE");
+        deletebtn.setBounds(557, 117, 105, 23);
+        infopnl.add(deletebtn);
+        
+        JButton btnUpdate = new JButton("Update");
+        btnUpdate.setBounds(557, 152, 105, 23);
+        infopnl.add(btnUpdate);
+       
 		JLabel dashboardbtn = new JLabel("DashBoard");
 		dashboardbtn.addMouseListener(new MouseAdapter() {
 			@Override
@@ -128,6 +192,7 @@ private void connect() {
 			public void mouseClicked(MouseEvent e) {
 			    Dashboard.setVisible(false);
 			    infopnl.setVisible(true);
+			    frame.setBounds(100, 100, 850, 415);
 			}
 		});
 		lblStudentinfo.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -137,7 +202,7 @@ private void connect() {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel_1.setBackground(new Color(99, 238, 133));
-		panel_1.setBounds(10, 22, 591, 66);
+		panel_1.setBounds(20, 22, 593, 66);
 		Dashboard.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -155,13 +220,13 @@ private void connect() {
 		JPanel ictpnl = new JPanel();
 		ictpnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		ictpnl.setBackground(new Color(4, 126, 250));
-		ictpnl.setBounds(10, 99, 174, 80);
+		ictpnl.setBounds(39, 99, 174, 80);
 		Dashboard.add(ictpnl);
 		ictpnl.setLayout(null);
 		
 		JLabel lblNewLabel_1 = new JLabel("Total Tvl-ICT Students");
 		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_1.setBounds(10, 11, 163, 14);
 		ictpnl.add(lblNewLabel_1);
 		
@@ -175,13 +240,13 @@ private void connect() {
 		JPanel stempnl = new JPanel();
 		stempnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		stempnl.setBackground(new Color(4, 126, 250));
-		stempnl.setBounds(224, 99, 174, 80);
+		stempnl.setBounds(242, 99, 174, 80);
 		Dashboard.add(stempnl);
 		stempnl.setLayout(null);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Total STEM Students");
 		lblNewLabel_1_1.setForeground(Color.WHITE);
-		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_1_1.setBounds(10, 11, 167, 14);
 		stempnl.add(lblNewLabel_1_1);
 		
@@ -189,13 +254,13 @@ private void connect() {
 		totalstemlbl.setHorizontalAlignment(SwingConstants.CENTER);
 		totalstemlbl.setForeground(Color.WHITE);
 		totalstemlbl.setFont(new Font("Tahoma", Font.BOLD, 14));
-		totalstemlbl.setBounds(10, 36, 183, 14);
+		totalstemlbl.setBounds(0, 36, 177, 14);
 		stempnl.add(totalstemlbl);
 		
 		JPanel abmpnl = new JPanel();
 		abmpnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		abmpnl.setBackground(new Color(4, 126, 250));
-		abmpnl.setBounds(427, 99, 174, 80);
+		abmpnl.setBounds(439, 99, 174, 80);
 		Dashboard.add(abmpnl);
 		abmpnl.setLayout(null);
 		
@@ -208,14 +273,14 @@ private void connect() {
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Total ABM Students");
 		lblNewLabel_1_1_1.setForeground(Color.WHITE);
-		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_1_1_1.setBounds(10, 11, 145, 14);
 		abmpnl.add(lblNewLabel_1_1_1);
 		
 		JPanel humpnl = new JPanel();
 		humpnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		humpnl.setBackground(new Color(4, 126, 250));
-		humpnl.setBounds(10, 209, 147, 80);
+		humpnl.setBounds(39, 209, 174, 80);
 		Dashboard.add(humpnl);
 		humpnl.setLayout(null);
 		
@@ -223,19 +288,19 @@ private void connect() {
 		totalhumbl_1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		totalhumbl_1_1.setForeground(Color.WHITE);
 		totalhumbl_1_1.setFont(new Font("Tahoma", Font.BOLD, 15));
-		totalhumbl_1_1.setBounds(10, 33, 127, 14);
+		totalhumbl_1_1.setBounds(20, 39, 127, 14);
 		humpnl.add(totalhumbl_1_1);
 		
 		JLabel lblNewLabel_1_1_2 = new JLabel("Total HUMSS Students");
 		lblNewLabel_1_1_2.setForeground(Color.WHITE);
-		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel_1_1_2.setBounds(10, 8, 127, 14);
+		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_1_1_2.setBounds(10, 8, 164, 14);
 		humpnl.add(lblNewLabel_1_1_2);
 		
 		JPanel gaspnl = new JPanel();
 		gaspnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		gaspnl.setBackground(new Color(4, 126, 250));
-		gaspnl.setBounds(182, 209, 147, 80);
+		gaspnl.setBounds(242, 209, 179, 80);
 		Dashboard.add(gaspnl);
 		gaspnl.setLayout(null);
 		
@@ -243,19 +308,19 @@ private void connect() {
 		totalgaslbl_1_2.setHorizontalAlignment(SwingConstants.CENTER);
 		totalgaslbl_1_2.setForeground(Color.WHITE);
 		totalgaslbl_1_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		totalgaslbl_1_2.setBounds(10, 32, 127, 14);
+		totalgaslbl_1_2.setBounds(20, 36, 127, 14);
 		gaspnl.add(totalgaslbl_1_2);
 		
 		JLabel lblNewLabel_1_1_3 = new JLabel("Total GAS Students");
 		lblNewLabel_1_1_3.setForeground(Color.WHITE);
-		lblNewLabel_1_1_3.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel_1_1_3.setBounds(10, 11, 127, 14);
+		lblNewLabel_1_1_3.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_1_1_3.setBounds(10, 11, 159, 14);
 		gaspnl.add(lblNewLabel_1_1_3);
 		
 		JPanel cookpnl = new JPanel();
 		cookpnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		cookpnl.setBackground(new Color(4, 126, 250));
-		cookpnl.setBounds(454, 209, 147, 80);
+		cookpnl.setBounds(439, 209, 174, 80);
 		Dashboard.add(cookpnl);
 		cookpnl.setLayout(null);
 		
@@ -263,13 +328,13 @@ private void connect() {
 		totalcooklbl_1_3.setHorizontalAlignment(SwingConstants.CENTER);
 		totalcooklbl_1_3.setForeground(Color.WHITE);
 		totalcooklbl_1_3.setFont(new Font("Tahoma", Font.BOLD, 14));
-		totalcooklbl_1_3.setBounds(10, 33, 127, 14);
+		totalcooklbl_1_3.setBounds(20, 36, 127, 14);
 		cookpnl.add(totalcooklbl_1_3);
 		
 		JLabel lblNewLabel_1_1_4 = new JLabel("Total Cookery Students");
 		lblNewLabel_1_1_4.setForeground(Color.WHITE);
-		lblNewLabel_1_1_4.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel_1_1_4.setBounds(10, 11, 137, 14);
+		lblNewLabel_1_1_4.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_1_1_4.setBounds(0, 11, 164, 14);
 		cookpnl.add(lblNewLabel_1_1_4);
 		
 				
@@ -316,7 +381,7 @@ private void connect() {
     			totalstemlbl.setText(String.valueOf(strandcounts.get("STEM")));
     			totalabmbl.setText(String.valueOf(strandcounts.get("ABM")));
     			totalhumbl_1_1.setText(String.valueOf(strandcounts.get("HUMSS")));
-    			totalgaslbl_1_2.setText(String.valueOf(strandcounts.get("G")));
+    			totalgaslbl_1_2.setText(String.valueOf(strandcounts.get("GAS")));
     			totalcooklbl_1_3.setText(String.valueOf(strandcounts.get("TVL-HE")));
     			
     			
@@ -333,7 +398,7 @@ private void connect() {
                 Statement statement = con.createStatement();
                 ResultSet resultSet = statement.executeQuery("SELECT * FROM studentinfo");
 
-                DefaultTableModel model = new DefaultTableModel();
+                model = new DefaultTableModel();
                 table.setModel(model);
 
                 ResultSetMetaData metaData = resultSet.getMetaData();
