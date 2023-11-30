@@ -1,6 +1,9 @@
 package enrollmentsystem;
 
-import java.awt.EventQueue;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,25 +15,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
-import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-
-import java.awt.Font;
-import java.awt.ScrollPane;
-
-import javax.swing.SwingConstants;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class Dashboard {
 
@@ -64,6 +60,7 @@ private void connect() {
 		updateTotalStudents();
 		TotalStrandStudents();
 		populateTable();
+		
 	}
 	
 	/**
@@ -116,7 +113,9 @@ private void connect() {
         table.getTableHeader().setReorderingAllowed(false);
         table.setFocusable(false);
         table.setRowSelectionAllowed(true);
+
         scrollPane.setViewportView(table);
+       
         
         JLabel searchforlbl = new JLabel("Search For:");
         searchforlbl.setBounds(571, 11, 95, 14);
@@ -133,9 +132,18 @@ private void connect() {
         	public void mouseClicked(MouseEvent e) {
         		try {
         			String keyword = searchtf.getText();
-        			PreparedStatement pr = con.prepareStatement("SELECT * FROM studentinfo WHERE ID = ? OR fname = ?");
+        			PreparedStatement pr = con.prepareStatement("SELECT * FROM studentinfo WHERE ID = ? OR fname = ? OR mname = ? OR lname = ? OR age = ? OR bdate = ? OR gender = ? OR pnumber = ? OR email = ? OR strand = ? OR Subjects = ?");
         			pr.setString(1, keyword);
         			pr.setString(2, keyword);
+        			pr.setString(3, keyword);
+        			pr.setString(4, keyword);
+        			pr.setString(5, keyword);
+        			pr.setString(6, keyword);
+        			pr.setString(7, keyword);
+        			pr.setString(8, keyword);
+        			pr.setString(9, keyword);
+        			pr.setString(10, keyword);
+        			
         			
         			ResultSet rs = pr.executeQuery();
         			 model.setRowCount(0);
@@ -170,6 +178,12 @@ private void connect() {
         infopnl.add(deletebtn);
         
         JButton btnUpdate = new JButton("Update");
+        btnUpdate.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		UpdateData();
+	        	}
+	        });
         btnUpdate.setBounds(557, 152, 105, 23);
         infopnl.add(btnUpdate);
        
@@ -190,6 +204,7 @@ private void connect() {
 		lblStudentinfo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				populateTable();
 			    Dashboard.setVisible(false);
 			    infopnl.setVisible(true);
 			    frame.setBounds(100, 100, 850, 415);
@@ -404,7 +419,7 @@ private void connect() {
                 ResultSetMetaData metaData = resultSet.getMetaData();
                 int columnCount = metaData.getColumnCount();
 
-                // Add columns dynamically
+                
                 for (int column = 1; column <= columnCount; column++) {
                     model.addColumn(metaData.getColumnName(column));
                 }
@@ -422,8 +437,33 @@ private void connect() {
                 e.printStackTrace();
             
                 }
-            
+           
         }
-    }
-    
-    
+    	private void UpdateData() {
+    	    	try {
+    	                
+    	    	        String query = "UPDATE studentinfo SET fname = ?, mname = ?, lname = ?, age = ?, bdate = ?, gender = ?, pnumber = ?, email = ?, strand = ?, Subjects = ? WHERE ID = ?";
+    	    	        PreparedStatement updateStatement = con.prepareStatement(query);
+    	    	        updateStatement.setString(1, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        updateStatement.setString(2, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        updateStatement.setString(3, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        updateStatement.setString(4, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        updateStatement.setString(5, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        updateStatement.setString(6, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        updateStatement.setString(7, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        updateStatement.setString(8, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        updateStatement.setString(9, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        updateStatement.setString(10, model.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString());
+    	    	        
+    	    	        updateStatement.setInt(11, Integer.parseInt(model.getValueAt(table.getSelectedRow(),table.getSelectedColumn()).toString()));
+
+    	    	        updateStatement.executeUpdate();
+    	    	   
+    	    	    
+    	    	} catch (Exception ex) {
+    	    	    ex.printStackTrace();
+    	    	}
+    	    
+    	    }
+}
+
