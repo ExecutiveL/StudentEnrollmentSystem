@@ -14,6 +14,6 @@ Reporting: Generate detailed reports on student enrollments, total of the studen
 ![image](https://github.com/user-attachments/assets/91ca1606-b648-4385-89af-ae5238f53c0a)
 ## Dashboard
 ![image](https://github.com/user-attachments/assets/5dcbca92-b441-4722-a150-6bff5c78247f)
-## Example of the student info where you can update, delete and edit the existing student's data
+## Example of the students info where you can update, delete and edit the existing student's data
 ![image](https://github.com/user-attachments/assets/c006fc48-ea8f-4d42-b657-4cc4e328bc7a)
 
